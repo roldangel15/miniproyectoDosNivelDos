@@ -146,9 +146,9 @@ console.log(cities);
                     />
                   </span>
                   <div className="flex gap-2 mt-2">
-                    <p>{isCelcius ? `${day.max_c}°C` : `${day.max_f}°F`}</p>
+                    <p>{isCelcius ? `${day.max_c}` : `${day.max_f}`}</p>
                     <p className="text-[#A09FB1]">
-                      {isCelcius ? `${day.min_c}°C` : `${day.min_f}°F`}
+                      {isCelcius ? `${day.min_c}` : `${day.min_f}`}
                     </p>
                   </div>
                 </li>
