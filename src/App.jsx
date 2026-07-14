@@ -18,7 +18,7 @@ function App() {
     cities,
     getCityWeather,
   } = useWeather();
-console.log(cities);
+
 
   const [searchLocationVal, setSearchLocationVal] = useState('');
 
