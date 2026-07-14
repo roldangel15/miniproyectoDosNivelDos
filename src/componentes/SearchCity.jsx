@@ -1,27 +1,23 @@
-
-
 export default function SearchCity({
-    isNavOpen,
-    setIsNavOpen,
-    searchLocationVal,
-    onChangeSearchLocation,
-    getCities,
-    cities,
-    getCityWeather
+  isNavOpen,
+  setIsNavOpen,
+  searchLocationVal,
+  onChangeSearchLocation,
+  getCities,
+  cities,
+  getCityWeather
 }) {
   return (
     <div>
-{isNavOpen && (
-        <section className="w-screen h-screen max-h-screen bg-[#1E213A] absolute top-0 left-0 md:w-[30vw] md:min-w-[380px]">
+      {isNavOpen && (
+        <section className="w-screen h-screen max-h-screen bg-white dark:bg-[#1E213A] absolute top-0 left-0 md:w-[30vw] md:min-w-[380px] z-50 transition-colors duration-300">
           <nav className="w-full h-24 flex items-end justify-around">
             <span
               className="absolute right-10 top-6 cursor-pointer"
-              onClick={() => {
-                setIsNavOpen(false);
-              }}
+              onClick={() => setIsNavOpen(false)}
             >
               <img
-                className="hover:w-7 hover:h-7"
+                className="hover:w-7 hover:h-7 invert dark:invert-0"
                 src="/close.svg"
                 width={25}
                 height={25}
@@ -29,16 +25,16 @@ export default function SearchCity({
               />
             </span>
 
-            <div className="flex items-center w-[55%] max-w-[268px] h-9 bg-transparent border border-[#E7E7EB] font-medium text-base text-[#616475]">
+            <div className="flex items-center w-[55%] max-w-[268px] h-9 bg-transparent border border-gray-300 dark:border-[#E7E7EB] font-medium text-base text-gray-500 dark:text-[#616475] transition-colors duration-300">
               <img
-                className="mx-2"
+                className="mx-2 invert dark:invert-0"
                 src="/search.svg"
                 width={24}
                 height={24}
                 alt="Search Icon"
               />
               <input
-                className="bg-transparent outline-none w-[233px] h-8 pr-1"
+                className="bg-transparent outline-none w-[233px] h-8 pr-1 placeholder-gray-400 dark:placeholder-[#616475]"
                 type="text"
                 placeholder="search location"
                 value={searchLocationVal}
@@ -47,7 +43,7 @@ export default function SearchCity({
             </div>
 
             <button
-              className="w-20 h-9 bg-[#3C47E9] px-1 font-semibold text-base text-[#E7E7EB] hover:text-[#def341]"
+              className="w-20 h-9 bg-[#3C47E9] px-1 font-semibold text-base text-white dark:text-[#E7E7EB] hover:text-[#def341] transition-colors duration-300"
               onClick={() => getCities(searchLocationVal.toLocaleLowerCase())}
             >
               Search
@@ -55,26 +51,20 @@ export default function SearchCity({
           </nav>
 
           <ul className="flex flex-col items-center w-full h-fit mt-[80px] pb-5">
-
-
-              {cities && cities.map((city, i) => (
-                <li
-                  key={i} 
-                  className="flex justify-between w-[70%] max-w-[367px] h-14 pl-2 text-base font-medium cursor-pointer text-[#E7E7EB] hover:border border-[#616475] mt-6 hover:after:bg-arrow-bg hover:after:bg-contain hover:after:bg-no-repeat hover:after:p-2 hover:after:mt-5 hover:after:mr-5"
-                  onClick={() => getCityWeather(city.lat, city.lon, city.name,city.state)}
-                >
-                  <p className="flex items-center text-lg ml-2">
-                    {city.name},&nbsp;&nbsp;{city.state}&nbsp;&nbsp;{city.country}
-                  </p>
-                </li>
-              ))}
-           
+            {cities && cities.map((city, i) => (
+              <li
+                key={i} 
+                className="flex justify-between w-[70%] max-w-[367px] h-14 pl-2 text-base font-medium cursor-pointer text-gray-800 dark:text-[#E7E7EB] hover:border border-gray-400 dark:border-[#616475] mt-6 hover:after:bg-arrow-bg hover:after:bg-contain hover:after:bg-no-repeat hover:after:p-2 hover:after:mt-5 hover:after:mr-5 transition-colors duration-300"
+                onClick={() => getCityWeather(city.lat, city.lon, city.name, city.state)}
+              >
+                <p className="flex items-center text-lg ml-2">
+                  {city.name},&nbsp;&nbsp;{city.state}&nbsp;&nbsp;{city.country}
+                </p>
+              </li>
+            ))}
           </ul>
-
         </section>
       )}
-
-
     </div>
   )
 }
