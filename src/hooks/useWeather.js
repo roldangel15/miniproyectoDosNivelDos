@@ -20,8 +20,7 @@ export const useWeather = () => {
     // Verificar credenciales al montar
     useEffect(() => {
         const keySnippet = config.appid ? `${config.appid.substring(0, 8)}...` : '❌ NO CONFIGURADA';
-        console.log('🔑 API Key:', keySnippet);
-        console.log('🔑 IPInfo Token:', config.ipInfoToken ? '✓ Configurado' : '❌ NO CONFIGURADO');
+        
     }, [config]);
 
     const getCoordinates = () => new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
@@ -41,40 +40,40 @@ export const useWeather = () => {
 
     const getLocationByIp = async () => {
         try {
-            console.log('📍 Obteniendo ubicación por IP...');
+            
             const response = await fetch(`https://ipinfo.io/json?token=${config.ipInfoToken}`);
             if (!response.ok) throw new Error(`IPInfo error: ${response.status}`);
             
             const { city, loc } = await response.json();
-            console.log('✅ Ubicación IP obtuvo:', city);
+            
             
             const [lat, long] = loc.split(',');
             return { lat, long, city };
         } catch (error) {
-            console.error('❌ Error IPInfo:', error);
+           
             return { lat: '40.4168', long: '-3.7038', city: 'Madrid' };
         }
     };
 
     const getAccurateWeather = async () => {
         try {
-            console.log('📍 Obteniendo geolocalización del navegador...');
+           
             const { coords: { latitude: lat, longitude: lon } } = await getCoordinates();
-            console.log('✅ Coordenadas:', lat, lon);
+            
 
             const geoUrl = `${config.baseUrl}/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${config.appid}`;
-            console.log('🌐 Llamando a:', geoUrl);
+            
             
             const geoResponse = await fetch(geoUrl);
             if (!geoResponse.ok) throw new Error(`Geocoding error: ${geoResponse.status} ${geoResponse.statusText}`);
             
             const geoData = await geoResponse.json();
             const cityName = geoData[0]?.name || 'Tu ubicación';
-            console.log('✅ Ciudad:', cityName);
+            
 
             await getWeather(lat, lon, cityName);
         } catch (error) {
-            console.error('❌ Error geolocalización:', error);
+            
             alert('No se pudo obtener tu ubicación. Usando ubicación por IP.');
             const { lat, long, city } = await getLocationByIp();
             await getWeather(lat, long, city);
@@ -90,17 +89,17 @@ export const useWeather = () => {
         if (!city) return;
         try {
             const url = `${config.baseUrl}/geo/1.0/direct?q=${city}&limit=5&appid=${config.appid}`;
-            console.log('🔍 Buscando ciudades:', url);
+            
             
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
             
             const jsonResponse = await response.json();
-            console.log('✅ Ciudades encontradas:', jsonResponse.length);
+            
             setCities(jsonResponse);
             setIsNavOpen(true);
         } catch (error) {
-            console.error('❌ Error buscando ciudades:', error);
+            
             alert(`Error al buscar ciudades: ${error.message}`);
         }
     };
@@ -108,15 +107,14 @@ export const useWeather = () => {
     const getWeather = async (latitude, longitude, city) => {
         try {
             setLoading(true);
-            console.log('🌤️ Obteniendo clima para:', city);
+            
 
             const endpoints = [
                 `${config.baseUrl}/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${config.appid}&units=imperial`,
                 `${config.baseUrl}/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${config.appid}&units=imperial`
             ];
 
-            console.log('🌐 Llamando a:', endpoints[0]);
-            console.log('🌐 Llamando a:', endpoints[1]);
+
 
             // Llamadas paralelas asíncronas para mejorar velocidad de carga
             const [currentRes, forecastRes] = await Promise.all(endpoints.map(url => fetch(url)));
@@ -125,7 +123,7 @@ export const useWeather = () => {
             if (!forecastRes.ok) throw new Error(`Forecast API error ${forecastRes.status}: ${await forecastRes.text()}`);
 
             const [currentData, forecastData] = await Promise.all([currentRes.json(), forecastRes.json()]);
-            console.log('✅ Clima actual y pronóstico obtenidos');
+            
 
             const current = {
                 date: dateFormat(currentData.dt * 1000),
@@ -165,9 +163,9 @@ export const useWeather = () => {
             }));
 
             setWeather({ current, forecast });
-            console.log('✅ Clima cargado correctamente');
+            
         } catch (error) {
-            console.error('❌ Error obteniendo clima:', error);
+           
             alert(`Error al obtener el clima: ${error.message}`);
         } finally {
             setLoading(false);
@@ -178,7 +176,7 @@ export const useWeather = () => {
         if (config.appid && config.ipInfoToken) {
             getLocationByIp().then(({ lat, long, city }) => getWeather(lat, long, city));
         } else {
-            console.error('⚠️ Faltan credenciales en .env');
+           
             setLoading(false);
         }
     }, [config]);
